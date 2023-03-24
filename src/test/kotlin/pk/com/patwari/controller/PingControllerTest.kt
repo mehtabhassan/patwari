@@ -27,7 +27,7 @@ class PingControllerTest{
     }
 
     @Nested
-    inner class batchCreateCashbook {
+    inner class TestPing {
         @Test
         @Throws(Exception::class)
         fun success() {
