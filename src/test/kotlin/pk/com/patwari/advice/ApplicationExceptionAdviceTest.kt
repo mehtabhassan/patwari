@@ -11,9 +11,10 @@ import org.springframework.http.ResponseEntity
 
 class ApplicationExceptionAdviceTest{
 
-    val defaultErrorMessage = "Unexpected error occurred"
     lateinit var exceptionAdvice: ApplicationExceptionAdvice
     lateinit var objectMapper: ObjectMapper
+
+    val defaultErrorMessage = "Unexpected error occurred"
 
     @BeforeEach
     fun beforeEach() {

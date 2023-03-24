@@ -13,6 +13,7 @@ class ApplicationExceptionAdvice {
     private val logger: Logger = LogManager.getLogger(ApplicationExceptionAdvice::class.java)
     private val ERROR_KEY = "errors"
     private val errorMessage = "An {} exception has occurred, errors : [{}]"
+    private val defaultErrorMessage = "Unexpected error occurred"
 
     @ExceptionHandler(Exception::class)
     fun handleGenericException(ex: Exception): ResponseEntity<Any> {
@@ -20,7 +21,7 @@ class ApplicationExceptionAdvice {
             ex.javaClass.name, listOf(ex.message).joinToString(), ex)
 
         return ResponseEntity(
-            mapOf(ERROR_KEY to listOf(errorMessage)),
+            mapOf(ERROR_KEY to listOf(defaultErrorMessage)),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
