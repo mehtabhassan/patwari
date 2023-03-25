@@ -9,6 +9,8 @@ import pk.com.patwari.constant.AccountStatus
 import pk.com.patwari.constant.AccountType
 import java.time.LocalDateTime
 import javax.persistence.Entity
+import javax.persistence.EnumType
+import javax.persistence.Enumerated
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
@@ -18,10 +20,12 @@ class Account(
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     var id: String = "",
-    val accountTitle: String,
-    val accountNumber: String,
-    val accountType: AccountType,
-    val status: AccountStatus,
+    val accountTitle: String = "",
+    val accountNumber: String = "",
+    @Enumerated(EnumType.STRING)
+    val accountType: AccountType = AccountType.ASSETS,
+    @Enumerated(EnumType.STRING)
+    val status: AccountStatus = AccountStatus.ACTIVE,
     @CreatedBy
     val createdBy: String = "",
     @LastModifiedBy
