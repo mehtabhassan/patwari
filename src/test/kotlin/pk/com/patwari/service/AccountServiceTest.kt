@@ -8,6 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.whenever
+import pk.com.patwari.constant.AccountStatus
+import pk.com.patwari.constant.AccountType
 import pk.com.patwari.model.Account
 import pk.com.patwari.repository.AccountRepository
 
@@ -25,7 +27,7 @@ class AccountServiceTest{
 
     @Nested
     inner class GetAllAccounts{
-        val account = Account("some-account-id", "some-account-title")
+        val account = Account(accountNumber = "some-account-number", accountTitle = "some-account-title", accountType = AccountType.ASSETS, status = AccountStatus.ACTIVE)
         @Test
         fun shouldReturnAccountList(){
 
