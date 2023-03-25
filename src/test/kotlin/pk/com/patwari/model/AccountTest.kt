@@ -10,8 +10,8 @@ class AccountTest{
         @Test
         fun modelTest(){
             val model = Account(id = "some-account-id", title = "some-account-title")
-            assertEquals(model.id, "some-account-id")
-            assertEquals(model.title, "some-account-title")
+            assertEquals("some-account-id", model.id)
+            assertEquals("some-account-title", model.title)
         }
     }
 }
