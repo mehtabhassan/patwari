@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import pk.com.patwari.advice.ApplicationExceptionAdvice
+import pk.com.patwari.constant.AccountStatus
+import pk.com.patwari.constant.AccountType
 import pk.com.patwari.dto.response.AccountDetailsResponse
 import pk.com.patwari.service.AccountService
 
@@ -40,7 +42,7 @@ class AccountControllerTest{
         @Test
         @Throws(Exception::class)
         fun success() {
-            val accountList = listOf(AccountDetailsResponse("some-account-id"))
+            val accountList = listOf(AccountDetailsResponse("some-account-id", "some-account-title", "some-account-number", AccountType.ASSETS, AccountStatus.ACTIVE ))
 
             whenever(
                 service.getAllAccounts()

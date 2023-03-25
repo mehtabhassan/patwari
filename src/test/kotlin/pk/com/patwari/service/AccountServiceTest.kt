@@ -27,7 +27,7 @@ class AccountServiceTest{
 
     @Nested
     inner class GetAllAccounts{
-        val account = Account(accountNumber = "some-account-number", accountTitle = "some-account-title", accountType = AccountType.ASSETS, status = AccountStatus.ACTIVE)
+        val account = Account(id = "some-account-id", accountNumber = "some-account-number", accountTitle = "some-account-title", accountType = AccountType.ASSETS, status = AccountStatus.ACTIVE)
         @Test
         fun shouldReturnAccountList(){
 
@@ -37,6 +37,10 @@ class AccountServiceTest{
 
             assertEquals(1, accountList.size)
             assertEquals("some-account-id", accountList[0].id)
+            assertEquals("some-account-number", accountList[0].accountNumber)
+            assertEquals("some-account-title", accountList[0].accountTitle)
+            assertEquals(AccountType.ASSETS, accountList[0].accountType)
+            assertEquals(AccountStatus.ACTIVE, accountList[0].status)
         }
     }
 }

@@ -8,6 +8,8 @@ import pk.com.patwari.repository.AccountRepository
 class AccountService(private val accountRepository: AccountRepository) {
 
     fun getAllAccounts(): List<AccountDetailsResponse>{
-        return accountRepository.findAll().map { AccountDetailsResponse(it.id) }
+        return accountRepository.findAll().map { AccountDetailsResponse(
+            it.id, it.accountTitle, it.accountNumber, it.accountType, it.status
+        )}
     }
 }
