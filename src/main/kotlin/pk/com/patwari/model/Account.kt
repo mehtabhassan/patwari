@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
 import pk.com.patwari.constant.AccountStatus
 import pk.com.patwari.constant.AccountType
+import pk.com.patwari.dto.request.AccountCreationRequest
 import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -37,5 +38,15 @@ class Account(
 ){
     init {
         this.id = id ?: FriendlyId.createFriendlyId()
+    }
+
+    companion object{
+        fun AccountCreationRequest.toAccountEntity(): Account {
+            return Account(
+                accountTitle = this.accountTitle,
+                accountNumber = this.accountNumber,
+                accountType = this.accountType
+            )
+        }
     }
 }
