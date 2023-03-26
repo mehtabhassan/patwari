@@ -1,4 +1,4 @@
-package patwari
+package pk.com.patwari
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
