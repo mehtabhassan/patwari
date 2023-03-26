@@ -20,6 +20,6 @@ class AccountController(val accountService: AccountService){
     fun getAllAccounts() = accountService.getAllAccounts()
 
     @PostMapping
-    fun createAccount(@RequestBody requestBody: AccountCreationRequest) = accountService.createAccount()
+    fun createAccount(@RequestBody requestBody: AccountCreationRequest) = accountService.createAccount(requestBody)
 
 }

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
-import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -61,16 +61,17 @@ class AccountControllerTest{
     inner class CreateAccount {
         @Test
         fun success() {
-            val payload = "{\"id\":\"1234567890\",\"accountTitle\":\"TEST ACCOUNT\",\"accountNumber\":\"ACC-0001\",\"accountType\":\"ASSETS\"}"
+            val requestPayload = "{\"id\":\"1234567890\",\"accountTitle\":\"TEST ACCOUNT\",\"accountNumber\":\"ACC-0001\",\"accountType\":\"ASSETS\"}"
+            val responsePayload  = AccountDetailsResponse("some-account-id", "some-account-title", "some-account-number", AccountType.ASSETS, AccountStatus.ACTIVE )
 
-            doNothing(). whenever(service).createAccount()
+            whenever(service.createAccount(any())).thenReturn(responsePayload)
 
             mvc.perform(MockMvcRequestBuilders.post(BASE_URI)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(payload))
+                .content(requestPayload))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
 
-            Mockito.verify(service, Mockito.times(1)).createAccount()
+            Mockito.verify(service, Mockito.times(1)).createAccount(any())
         }
 
         @Test
@@ -82,7 +83,7 @@ class AccountControllerTest{
                 .content(payload))
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError)
 
-            Mockito.verify(service, Mockito.times(0)).createAccount()
+            Mockito.verify(service, Mockito.times(0)).createAccount(any())
         }
     }
 }

@@ -1,7 +1,9 @@
 package pk.com.patwari.service
 
 import org.springframework.stereotype.Service
+import pk.com.patwari.dto.request.AccountCreationRequest
 import pk.com.patwari.dto.response.AccountDetailsResponse
+import pk.com.patwari.model.Account.Companion.toAccountEntity
 import pk.com.patwari.repository.AccountRepository
 
 @Service
@@ -13,7 +15,8 @@ class AccountService(private val accountRepository: AccountRepository) {
         )}
     }
 
-    fun createAccount(){
-        //todo write creation logic
+    fun createAccount(requestDto: AccountCreationRequest): AccountDetailsResponse {
+        val account = accountRepository.save(requestDto.toAccountEntity())
+        return AccountDetailsResponse(account.id, account.accountTitle, account.accountNumber, account.accountType, account.status)
     }
 }
