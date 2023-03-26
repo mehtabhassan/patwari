@@ -52,6 +52,8 @@ class AccountControllerTest{
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(accountList)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
+
+            Mockito.verify(service, Mockito.times(1)).getAllAccounts()
         }
     }
 
