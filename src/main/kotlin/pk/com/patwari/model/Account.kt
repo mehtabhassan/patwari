@@ -19,27 +19,18 @@ import javax.persistence.Id
 @Entity
 class Account(
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    var id: String = "",
+    var id: String = FriendlyId.createFriendlyId(),
     val accountTitle: String = "",
     val accountNumber: String = "",
     @Enumerated(EnumType.STRING)
     val accountType: AccountType = AccountType.ASSETS,
     @Enumerated(EnumType.STRING)
     val status: AccountStatus = AccountStatus.ACTIVE,
-    @CreatedBy
-    val createdBy: String = "",
-    @LastModifiedBy
-    val updatedBy: String = "",
     @CreatedDate
     val createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
     val updatedAt: LocalDateTime = LocalDateTime.now()
 ){
-    init {
-        this.id = id ?: FriendlyId.createFriendlyId()
-    }
-
     companion object{
         fun AccountCreationRequest.toAccountEntity(): Account {
             return Account(
