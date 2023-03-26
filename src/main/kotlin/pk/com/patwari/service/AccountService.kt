@@ -12,4 +12,8 @@ class AccountService(private val accountRepository: AccountRepository) {
             it.id, it.accountTitle, it.accountNumber, it.accountType, it.status
         )}
     }
+
+    fun createAccount(){
+        //todo write creation logic
+    }
 }

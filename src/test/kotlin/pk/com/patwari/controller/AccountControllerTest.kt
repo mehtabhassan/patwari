@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -44,14 +46,41 @@ class AccountControllerTest{
         fun success() {
             val accountList = listOf(AccountDetailsResponse("some-account-id", "some-account-title", "some-account-number", AccountType.ASSETS, AccountStatus.ACTIVE ))
 
-            whenever(
-                service.getAllAccounts()
-            ).thenReturn(accountList)
+            whenever(service.getAllAccounts()).thenReturn(accountList)
 
             mvc.perform(MockMvcRequestBuilders.get(BASE_URI)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.content().json(objectMapper.writeValueAsString(accountList)))
                 .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
+        }
+    }
+
+    @Nested
+    inner class CreateAccount {
+        @Test
+        fun success() {
+            val payload = "{\"id\":\"1234567890\",\"accountTitle\":\"TEST ACCOUNT\",\"accountNumber\":\"ACC-0001\",\"accountType\":\"ASSETS\"}"
+
+            doNothing(). whenever(service).createAccount()
+
+            mvc.perform(MockMvcRequestBuilders.post(BASE_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
+
+            Mockito.verify(service, Mockito.times(1)).createAccount()
+        }
+
+        @Test
+        fun failure_in_case_of_bad_payload() {
+            val payload = "{\"id\":\"1234567890\",\"accountTitle\":\"TEST ACCOUNT\",\"accountNumber\":\"ACC-0001\",\"accountType\":\"ABC\"}"
+
+            mvc.perform(MockMvcRequestBuilders.post(BASE_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(payload))
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError)
+
+            Mockito.verify(service, Mockito.times(0)).createAccount()
         }
     }
 }
