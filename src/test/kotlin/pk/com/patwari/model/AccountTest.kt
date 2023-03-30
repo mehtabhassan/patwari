@@ -16,6 +16,7 @@ class AccountTest{
             assertEquals("some-account-title", model.accountTitle)
             assertEquals(AccountType.ASSETS, model.accountType)
             assertEquals(AccountStatus.ACTIVE, model.status)
+            assertEquals(0.0, model.balance)
         }
     }
 }

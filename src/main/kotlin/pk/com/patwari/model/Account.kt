@@ -1,9 +1,7 @@
 package pk.com.patwari.model
 
 import com.devskiller.friendly_id.FriendlyId
-import org.springframework.data.annotation.CreatedBy
 import org.springframework.data.annotation.CreatedDate
-import org.springframework.data.annotation.LastModifiedBy
 import org.springframework.data.annotation.LastModifiedDate
 import pk.com.patwari.constant.AccountStatus
 import pk.com.patwari.constant.AccountType
@@ -12,8 +10,6 @@ import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.EnumType
 import javax.persistence.Enumerated
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
 import javax.persistence.Id
 
 @Entity
@@ -26,6 +22,7 @@ class Account(
     val accountType: AccountType = AccountType.ASSETS,
     @Enumerated(EnumType.STRING)
     val status: AccountStatus = AccountStatus.ACTIVE,
+    val balance: Double = 0.0,
     @CreatedDate
     val createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
