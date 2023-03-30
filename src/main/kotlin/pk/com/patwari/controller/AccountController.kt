@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import pk.com.patwari.dto.request.AccountCreationRequest
+import pk.com.patwari.dto.request.FundsTransferRequest
 import pk.com.patwari.service.AccountService
 
 @RestController
@@ -21,5 +22,8 @@ class AccountController(val accountService: AccountService){
 
     @PostMapping
     fun createAccount(@RequestBody requestBody: AccountCreationRequest) = accountService.createAccount(requestBody)
+
+    @PostMapping("/fund/transfer")
+    fun fundTransfer(@RequestBody requestBody: FundsTransferRequest) = accountService.fundTransfer(requestBody)
 
 }

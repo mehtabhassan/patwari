@@ -9,6 +9,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
@@ -84,6 +85,49 @@ class AccountControllerTest{
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError)
 
             Mockito.verify(service, Mockito.times(0)).createAccount(any())
+        }
+    }
+
+    @Nested
+    inner class FundTransfer {
+        @Test
+        fun successfully_recieve_request_with_good_payload() {
+            val requestPayload = "{\"srcAccount\":\"some-src-acc-num\",\"destAccount\":\"some-dest-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
+
+            doNothing().whenever(service).fundTransfer(any())
+
+            mvc.perform(MockMvcRequestBuilders.post(BASE_URI + "/fund/transfer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestPayload))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
+
+            Mockito.verify(service, Mockito.times(1)).fundTransfer(any())
+        }
+
+        @Test
+        fun successfully_recieve_request_with_no_src_account() {
+            val requestPayload = "{\"destAccount\":\"some-dest-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
+
+            doNothing().whenever(service).fundTransfer(any())
+
+            mvc.perform(MockMvcRequestBuilders.post(BASE_URI + "/fund/transfer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestPayload))
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful)
+
+            Mockito.verify(service, Mockito.times(1)).fundTransfer(any())
+        }
+
+        @Test
+        fun failure_in_case_of_bad_payload() {
+            val requestPayload = "{\"srcAccount\":\"some-src-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
+
+            mvc.perform(MockMvcRequestBuilders.post(BASE_URI  + "/fund/transfer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestPayload))
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError)
+
+            Mockito.verify(service, Mockito.times(0)).fundTransfer(any())
         }
     }
 }
