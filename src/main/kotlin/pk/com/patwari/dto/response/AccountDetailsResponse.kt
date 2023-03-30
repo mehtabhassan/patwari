@@ -7,6 +7,7 @@ data class AccountDetailsResponse(
     val id: String,
     val accountTitle: String,
     val accountNumber: String,
+    val balance: Double,
     val accountType: AccountType,
     val status: AccountStatus,
 )

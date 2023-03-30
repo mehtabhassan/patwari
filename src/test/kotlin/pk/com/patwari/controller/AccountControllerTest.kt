@@ -44,7 +44,7 @@ class AccountControllerTest{
         @Test
         @Throws(Exception::class)
         fun success() {
-            val accountList = listOf(AccountDetailsResponse("some-account-id", "some-account-title", "some-account-number", AccountType.ASSETS, AccountStatus.ACTIVE ))
+            val accountList = listOf(AccountDetailsResponse("some-account-id", "some-account-title", "some-account-number", 0.0, AccountType.ASSETS, AccountStatus.ACTIVE ))
 
             whenever(service.getAllAccounts()).thenReturn(accountList)
 
@@ -62,7 +62,7 @@ class AccountControllerTest{
         @Test
         fun success() {
             val requestPayload = "{\"id\":\"1234567890\",\"accountTitle\":\"TEST ACCOUNT\",\"accountNumber\":\"ACC-0001\",\"accountType\":\"ASSETS\"}"
-            val responsePayload  = AccountDetailsResponse("some-account-id", "some-account-title", "some-account-number", AccountType.ASSETS, AccountStatus.ACTIVE )
+            val responsePayload  = AccountDetailsResponse("some-account-id", "some-account-title", "some-account-number", 0.0, AccountType.ASSETS, AccountStatus.ACTIVE )
 
             whenever(service.createAccount(any())).thenReturn(responsePayload)
 

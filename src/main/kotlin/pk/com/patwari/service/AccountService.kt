@@ -11,12 +11,12 @@ class AccountService(private val accountRepository: AccountRepository) {
 
     fun getAllAccounts(): List<AccountDetailsResponse>{
         return accountRepository.findAll().map { AccountDetailsResponse(
-            it.id, it.accountTitle, it.accountNumber, it.accountType, it.status
+            it.id, it.accountTitle, it.accountNumber, it.balance, it.accountType, it.status
         )}
     }
 
     fun createAccount(requestDto: AccountCreationRequest): AccountDetailsResponse {
         val account = accountRepository.save(requestDto.toAccountEntity())
-        return AccountDetailsResponse(account.id, account.accountTitle, account.accountNumber, account.accountType, account.status)
+        return AccountDetailsResponse(account.id, account.accountTitle, account.accountNumber, account.balance, account.accountType, account.status)
     }
 }
