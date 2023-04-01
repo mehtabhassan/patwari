@@ -2,11 +2,13 @@ package pk.com.patwari.service
 
 import org.springframework.stereotype.Service
 import pk.com.patwari.constant.AccountType
+import pk.com.patwari.constant.TransactionType
 import pk.com.patwari.dto.request.AccountCreationRequest
 import pk.com.patwari.dto.request.FundsTransferRequest
 import pk.com.patwari.dto.response.AccountDetailsResponse
 import pk.com.patwari.model.Account
 import pk.com.patwari.model.Account.Companion.toAccountEntity
+import pk.com.patwari.model.AccountLedger.Companion.mapLedgerEntry
 import pk.com.patwari.repository.AccountRepository
 import javax.transaction.Transactional
 
@@ -26,18 +28,19 @@ class AccountService(private val accountRepository: AccountRepository) {
 
     @Transactional
     fun fundTransfer(requestDto: FundsTransferRequest) {
-
         if(!requestDto.srcAccount.isNullOrEmpty()) {
             val srcAcc = accountRepository.findByAccountNumber(requestDto.srcAccount!!)
-            debitAccount(srcAcc, requestDto.amount)
+            val updatedSrcAcc = debitAccount(srcAcc, requestDto.amount)
+            requestDto.mapLedgerEntry(TransactionType.DEBIT, updatedSrcAcc.balance)
         }
 
         val destAcc = accountRepository.findByAccountNumber(requestDto.destAccount)
-        creditAccount(destAcc, requestDto.amount)
+        val updatedDestAcc = creditAccount(destAcc, requestDto.amount)
+        requestDto.mapLedgerEntry(TransactionType.CREDIT, updatedDestAcc.balance)
     }
 
-    fun debitAccount(account: Account, amount: Double){
-        when(account.accountType){
+    fun debitAccount(account: Account, amount: Double): Account{
+        return when(account.accountType){
             AccountType.ASSETS, AccountType.EXPENSES -> {
                 accountRepository.addAmount(account.id, amount)
             }
@@ -47,14 +50,14 @@ class AccountService(private val accountRepository: AccountRepository) {
         }
     }
 
-    fun creditAccount(account: Account, amount: Double){
-        var updatedAccount: Account
-        when(account.accountType){
+    fun creditAccount(account: Account, amount: Double): Account{
+        return when(account.accountType){
             AccountType.ASSETS, AccountType.EXPENSES -> {
-                updatedAccount = accountRepository.subtractAmount(account.id, amount)
+                accountRepository.subtractAmount(account.id, amount)
             }
+
             AccountType.EQUITY, AccountType.LIABILITIES, AccountType.REVENUE -> {
-                updatedAccount = accountRepository.addAmount(account.id, amount)
+                accountRepository.addAmount(account.id, amount)
             }
         }
     }
