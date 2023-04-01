@@ -19,15 +19,15 @@ interface AccountRepository : CrudRepository<Account, String>{
 
     @Modifying
     @Query("UPDATE Account a " +
-        "SET a.balance = s.balance + :amount, " +
+        "SET a.balance = a.balance + :amount, " +
         "a.updatedAt = CURRENT_TIMESTAMP() " +
         "WHERE a.id = :accountId")
-    fun addAmount(@Param("accountId") walletNumber: String, @Param("amount") amount: Double): Account
+    fun addAmount(@Param("accountId") accountId: String, @Param("amount") amount: Double): Account
 
     @Modifying
     @Query("UPDATE Account a " +
-        "SET a.balance = s.balance - :amount, " +
+        "SET a.balance = a.balance - :amount, " +
         "a.updatedAt = CURRENT_TIMESTAMP() " +
         "WHERE a.id = :accountId")
-    fun subtractAmount(@Param("accountId") walletNumber: String, @Param("amount") amount: Double): Account
+    fun subtractAmount(@Param("accountId") accountId: String, @Param("amount") amount: Double): Account
 }

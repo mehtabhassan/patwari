@@ -91,7 +91,7 @@ class AccountControllerTest{
     @Nested
     inner class FundTransfer {
         @Test
-        fun successfully_recieve_request_with_good_payload() {
+        fun successfully_receive_request_with_good_payload() {
             val requestPayload = "{\"srcAccount\":\"some-src-acc-num\",\"destAccount\":\"some-dest-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
 
             doNothing().whenever(service).fundTransfer(any())
@@ -105,7 +105,7 @@ class AccountControllerTest{
         }
 
         @Test
-        fun successfully_recieve_request_with_no_src_account() {
+        fun successfully_receive_request_with_no_src_account() {
             val requestPayload = "{\"destAccount\":\"some-dest-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
 
             doNothing().whenever(service).fundTransfer(any())
@@ -120,7 +120,7 @@ class AccountControllerTest{
 
         @Test
         fun failure_in_case_of_bad_payload() {
-            val requestPayload = "{\"srcAccount\":\"some-src-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
+            val requestPayload = "{\"srcAccount\":\"some-src-acc-num\",\"amount\":\"abc\",\"description\":\"\"}"
 
             mvc.perform(MockMvcRequestBuilders.post(BASE_URI  + "/fund/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
