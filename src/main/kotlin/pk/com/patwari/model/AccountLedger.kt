@@ -4,6 +4,7 @@ import com.devskiller.friendly_id.FriendlyId
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.LastModifiedDate
 import pk.com.patwari.constant.TransactionType
+import pk.com.patwari.dto.request.FundsTransferRequest
 import java.time.LocalDateTime
 import javax.persistence.Entity
 import javax.persistence.EnumType
@@ -24,4 +25,16 @@ class AccountLedger(
     val createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
     val updatedAt: LocalDateTime = LocalDateTime.now()
-)
+){
+    companion object{
+        fun FundsTransferRequest.mapLedgerEntry(transactionType: TransactionType, closingBalance: Double): AccountLedger {
+            return AccountLedger(
+                accountId = this.srcAccount.orEmpty(),
+                amount = this.amount,
+                transactionType = TransactionType.CREDIT,
+                closingBalance = closingBalance,
+                description = this.description
+            )
+        }
+    }
+}
