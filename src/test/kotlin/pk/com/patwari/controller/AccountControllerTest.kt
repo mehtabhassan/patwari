@@ -94,7 +94,7 @@ class AccountControllerTest{
         fun successfully_receive_request_with_good_payload() {
             val requestPayload = "{\"srcAccount\":\"some-src-acc-num\",\"destAccount\":\"some-dest-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
 
-            doNothing().whenever(service).fundTransfer(any())
+            whenever(service.fundTransfer(any())).thenReturn(any())
 
             mvc.perform(MockMvcRequestBuilders.post(BASE_URI + "/fund/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,7 +108,7 @@ class AccountControllerTest{
         fun successfully_receive_request_with_no_src_account() {
             val requestPayload = "{\"destAccount\":\"some-dest-acc-num\",\"amount\":\"100\",\"description\":\"\"}"
 
-            doNothing().whenever(service).fundTransfer(any())
+            whenever(service.fundTransfer(any())).thenReturn(any())
 
             mvc.perform(MockMvcRequestBuilders.post(BASE_URI + "/fund/transfer")
                 .contentType(MediaType.APPLICATION_JSON)
