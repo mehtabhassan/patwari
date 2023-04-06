@@ -22,12 +22,13 @@ class Account(
     val accountType: AccountType = AccountType.ASSETS,
     @Enumerated(EnumType.STRING)
     val status: AccountStatus = AccountStatus.ACTIVE,
-    val balance: Double = 0.0,
+    var balance: Double = 0.0,
     @CreatedDate
     val createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
     val updatedAt: LocalDateTime = LocalDateTime.now()
 ){
+
     companion object{
         fun AccountCreationRequest.toAccountEntity(): Account {
             return Account(
@@ -35,6 +36,16 @@ class Account(
                 accountNumber = this.accountNumber,
                 accountType = this.accountType
             )
+        }
+
+        fun Account.addAmount(amount: Double): Account {
+            this.balance += amount
+            return this
+        }
+
+        fun Account.subtractAmount(amount: Double): Account {
+            this.balance -= amount
+            return this
         }
     }
 }

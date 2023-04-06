@@ -101,13 +101,11 @@ class AccountServiceTest{
             requestDto = FundsTransferRequest(destAccount = "some-dest-account-number", amount = 100.0, description = "")
 
             whenever(accountRepository.findByAccountNumber("some-dest-account-number")).thenReturn(destAccount)
-            whenever(accountRepository.addAmount("some-dest-account-id", 100.0)).thenReturn(updatedDestAccount)
 
             val response = service.fundTransfer(requestDto)
 
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-dest-account-number")
-            Mockito.verify(accountRepository, Mockito.times(1)).addAmount("some-dest-account-id", 100.0)
-            Mockito.verify(accountRepository, Mockito.times(0)).subtractAmount("",0.0)
+            Mockito.verify(accountRepository, Mockito.times(1)).save(any())
             Mockito.verify(accountLedgerRepository, Mockito.times(1)).save(any())
 
             assertNull(response.srcAccount)
@@ -121,16 +119,12 @@ class AccountServiceTest{
 
             whenever(accountRepository.findByAccountNumber("some-src-account-number")).thenReturn(srcAccount)
             whenever(accountRepository.findByAccountNumber("some-dest-account-number")).thenReturn(destAccount)
-            whenever(accountRepository.addAmount("some-src-account-id", 100.0)).thenReturn(updatedSrcAccount)
-            whenever(accountRepository.addAmount("some-dest-account-id", 100.0)).thenReturn(updatedDestAccount)
 
             val response = service.fundTransfer(requestDto)
 
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-src-account-number")
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-dest-account-number")
-            Mockito.verify(accountRepository, Mockito.times(1)).addAmount("some-src-account-id", 100.0)
-            Mockito.verify(accountRepository, Mockito.times(1)).addAmount("some-dest-account-id", 100.0)
-            Mockito.verify(accountRepository, Mockito.times(0)).subtractAmount("",0.0)
+            Mockito.verify(accountRepository, Mockito.times(2)).save(any())
             Mockito.verify(accountLedgerRepository, Mockito.times(2)).save(any())
 
             assertEquals("some-src-account-number", response.srcAccount?.accountNumber)
@@ -149,16 +143,12 @@ class AccountServiceTest{
 
             whenever(accountRepository.findByAccountNumber("some-src-account-number")).thenReturn(srcAccount)
             whenever(accountRepository.findByAccountNumber("some-dest-account-number")).thenReturn(destAccount)
-            whenever(accountRepository.subtractAmount("some-src-account-id", 100.0)).thenReturn(updatedSrcAccount)
-            whenever(accountRepository.subtractAmount("some-dest-account-id", 100.0)).thenReturn(updatedDestAccount)
 
             val response = service.fundTransfer(requestDto)
 
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-src-account-number")
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-dest-account-number")
-            Mockito.verify(accountRepository, Mockito.times(1)).subtractAmount("some-src-account-id", 100.0)
-            Mockito.verify(accountRepository, Mockito.times(1)).subtractAmount("some-dest-account-id", 100.0)
-            Mockito.verify(accountRepository, Mockito.times(0)).addAmount("",0.0)
+            Mockito.verify(accountRepository, Mockito.times(2)).save(any())
             Mockito.verify(accountLedgerRepository, Mockito.times(2)).save(any())
 
             assertEquals("some-src-account-number", response.srcAccount?.accountNumber)
@@ -176,15 +166,12 @@ class AccountServiceTest{
 
             whenever(accountRepository.findByAccountNumber("some-src-account-number")).thenReturn(srcAccount)
             whenever(accountRepository.findByAccountNumber("some-dest-account-number")).thenReturn(destAccount)
-            whenever(accountRepository.subtractAmount("some-src-account-id", 100.0)).thenReturn(updatedSrcAccount)
-            whenever(accountRepository.addAmount("some-dest-account-id", 100.0)).thenReturn(updatedDestAccount)
 
             val response = service.fundTransfer(requestDto)
 
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-src-account-number")
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-dest-account-number")
-            Mockito.verify(accountRepository, Mockito.times(1)).subtractAmount("some-src-account-id", 100.0)
-            Mockito.verify(accountRepository, Mockito.times(1)).addAmount("some-dest-account-id", 100.0)
+            Mockito.verify(accountRepository, Mockito.times(2)).save(any())
             Mockito.verify(accountLedgerRepository, Mockito.times(2)).save(any())
 
             assertEquals("some-src-account-number", response.srcAccount?.accountNumber)
@@ -202,15 +189,12 @@ class AccountServiceTest{
 
             whenever(accountRepository.findByAccountNumber("some-src-account-number")).thenReturn(srcAccount)
             whenever(accountRepository.findByAccountNumber("some-dest-account-number")).thenReturn(destAccount)
-            whenever(accountRepository.addAmount("some-src-account-id", 100.0)).thenReturn(updatedSrcAccount)
-            whenever(accountRepository.subtractAmount("some-dest-account-id", 100.0)).thenReturn(updatedDestAccount)
 
             val response = service.fundTransfer(requestDto)
 
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-src-account-number")
             Mockito.verify(accountRepository, Mockito.times(1)).findByAccountNumber("some-dest-account-number")
-            Mockito.verify(accountRepository, Mockito.times(1)).addAmount("some-src-account-id", 100.0)
-            Mockito.verify(accountRepository, Mockito.times(1)).subtractAmount("some-dest-account-id", 100.0)
+            Mockito.verify(accountRepository, Mockito.times(2)).save(any())
             Mockito.verify(accountLedgerRepository, Mockito.times(2)).save(any())
 
             assertEquals("some-src-account-number", response.srcAccount?.accountNumber)

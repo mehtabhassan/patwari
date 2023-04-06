@@ -9,6 +9,8 @@ import pk.com.patwari.dto.response.AccountDetails
 import pk.com.patwari.dto.response.AccountDetailsResponse
 import pk.com.patwari.dto.response.FundTransferResponse
 import pk.com.patwari.model.Account
+import pk.com.patwari.model.Account.Companion.addAmount
+import pk.com.patwari.model.Account.Companion.subtractAmount
 import pk.com.patwari.model.Account.Companion.toAccountEntity
 import pk.com.patwari.model.AccountLedger.Companion.mapLedgerEntry
 import pk.com.patwari.repository.AccountLedgerRepository
@@ -39,6 +41,7 @@ class AccountService(private val accountRepository: AccountRepository,
             val srcAcc = accountRepository.findByAccountNumber(requestDto.srcAccount)
             val updatedSrcAcc = debitAccount(srcAcc, requestDto.amount)
             val debitLedger = requestDto.mapLedgerEntry(TransactionType.DEBIT, updatedSrcAcc.balance)
+            accountRepository.save(updatedSrcAcc)
             accountLedgerRepository.save(debitLedger)
 
             srcAccDetails = AccountDetails(requestDto.srcAccount, debitLedger.closingBalance)
@@ -47,6 +50,7 @@ class AccountService(private val accountRepository: AccountRepository,
         val destAcc = accountRepository.findByAccountNumber(requestDto.destAccount)
         val updatedDestAcc = creditAccount(destAcc, requestDto.amount)
         val creditLedger = requestDto.mapLedgerEntry(TransactionType.CREDIT, updatedDestAcc.balance)
+        accountRepository.save(updatedDestAcc)
         accountLedgerRepository.save(creditLedger)
 
         destAccDetails = AccountDetails(requestDto.destAccount, creditLedger.closingBalance)
@@ -57,10 +61,10 @@ class AccountService(private val accountRepository: AccountRepository,
     fun debitAccount(account: Account, amount: Double): Account{
         return when(account.accountType){
             AccountType.ASSETS, AccountType.EXPENSES -> {
-                accountRepository.addAmount(account.id, amount)
+                account.addAmount(amount)
             }
             AccountType.EQUITY, AccountType.LIABILITIES, AccountType.REVENUE -> {
-                accountRepository.subtractAmount(account.id, amount)
+                account.subtractAmount(amount)
             }
         }
     }
@@ -68,11 +72,11 @@ class AccountService(private val accountRepository: AccountRepository,
     fun creditAccount(account: Account, amount: Double): Account{
         return when(account.accountType){
             AccountType.ASSETS, AccountType.EXPENSES -> {
-                accountRepository.subtractAmount(account.id, amount)
+                account.subtractAmount(amount)
             }
 
             AccountType.EQUITY, AccountType.LIABILITIES, AccountType.REVENUE -> {
-                accountRepository.addAmount(account.id, amount)
+                account.addAmount(amount)
             }
         }
     }
